@@ -1,119 +1,169 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Network Exam Study Guide</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Network Exam Preparation Guide</title>
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f4f7f9;
+      font-family: "Segoe UI", sans-serif;
       margin: 0;
-      padding: 20px;
+      background-color: #f4f4f9;
       color: #333;
     }
-    h1, h2, h3 {
-      color: #2c3e50;
-    }
-    .section {
-      background-color: #ffffff;
+    header {
+      background-color: #283593;
+      color: white;
       padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
+      text-align: center;
     }
-    code, pre {
-      background-color: #eef1f4;
+    nav {
+      background: #3949ab;
+      color: white;
+      padding: 15px;
+      position: sticky;
+      top: 0;
+    }
+    nav a {
+      color: #fff;
+      margin: 0 10px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    section {
+      padding: 20px;
+      max-width: 900px;
+      margin: auto;
+    }
+    h2 {
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 5px;
+      margin-top: 40px;
+    }
+    pre {
+      background-color: #1e1e1e;
+      color: #dcdcdc;
       padding: 10px;
-      border-radius: 5px;
-      display: block;
+      border-radius: 6px;
       overflow-x: auto;
-      margin-top: 10px;
+      font-size: 14px;
     }
-    ul {
-      line-height: 1.6;
+    code {
+      font-family: Consolas, monospace;
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #e8eaf6;
+      color: #555;
+      margin-top: 40px;
     }
   </style>
 </head>
 <body>
-  <h1>Network Exam Study Guide</h1>
+  <header>
+    <h1>Network Exam Preparation Guide</h1>
+    <p>A professional configuration reference for networking exams and practice.</p>
+  </header>
 
-  <div class="section">
-    <h2>Topics</h2>
+  <nav>
+    <a href="#topics">Topics</a>
+    <a href="#ospf">OSPF</a>
+    <a href="#nat">NAT</a>
+    <a href="#gre">GRE</a>
+    <a href="#ipv6">IPv6</a>
+  </nav>
+
+  <section id="topics">
+    <h2>Key Topics</h2>
     <ul>
-      <li>OSPFv2 and OSPFv3 configuration</li>
-      <li>IPv4 and IPv6 addressing</li>
-      <li>Static and dynamic NAT (PAT)</li>
-      <li>GRE VPN Tunnel</li>
-      <li>Default routing</li>
+      <li>OSPFv2 and OSPFv3 Configuration</li>
+      <li>IPv4 and IPv6 Addressing</li>
+      <li>Static and Dynamic NAT (PAT)</li>
+      <li>GRE VPN Tunnel Setup</li>
+      <li>Default Routing Strategies</li>
       <li>Access Control Lists (ACL)</li>
-      <li>DHCPv6 configuration</li>
+      <li>Stateful DHCPv6 Services</li>
     </ul>
-  </div>
+  </section>
 
-  <div class="section">
-    <h2>OSPFv2 Example</h2>
+  <section id="ospf">
+    <h2>1. OSPF Configuration</h2>
+    <h3>OSPFv2</h3>
     <pre><code>router ospf 1
  router-id 2.2.2.2
  network 172.16.0.0 0.0.255.255 area 0
  passive-interface default
  no passive-interface g0/0
+
 interface g0/0
  ip ospf hello-interval 20
  ip ospf dead-interval 80</code></pre>
-  </div>
 
-  <div class="section">
-    <h2>Dynamic NAT (R3)</h2>
-    <pre><code>access-list 1 permit 192.168.3.0 0.0.0.255
-ip nat pool SITE3_POOL 209.165.17.1 209.165.17.100 netmask 255.255.255.0
-ip nat inside source list 1 pool SITE3_POOL overload
-interface g0/0
- ip nat inside
-interface g0/1
- ip nat outside</code></pre>
-  </div>
-
-  <div class="section">
-    <h2>Static NAT (R1)</h2>
-    <pre><code>ip nat inside source static 192.168.1.10 200.168.10.1
-interface g0/0
- ip nat inside
-interface g0/1
- ip nat outside</code></pre>
-  </div>
-
-  <div class="section">
-    <h2>GRE Tunnel Configuration</h2>
-    <pre><code>interface Tunnel0
- ip address 100.100.100.1 255.255.255.252
- tunnel source [R3-public-IP]
- tunnel destination [R4-public-IP]</code></pre>
-  </div>
-
-  <div class="section">
-    <h2>IPv6 OSPFv3 Configuration</h2>
+    <h3>OSPFv3 (IPv6)</h3>
     <pre><code>ipv6 unicast-routing
+
 interface g0/0
  ipv6 address 2001:db8:acad:0010::1/64
  ipv6 address FE80::1 link-local
  ipv6 ospf 1 area 0
  ipv6 ospf hello-interval 20
  ipv6 ospf dead-interval 80
+
 ipv6 router ospf 1
  router-id 1.1.1.1</code></pre>
-  </div>
+  </section>
 
-  <div class="section">
-    <h2>IPv6 Default Route</h2>
-    <pre><code>ipv6 route ::/0 [next-hop or interface]
-ipv6 router ospf 1
+  <section id="nat">
+    <h2>2. NAT Translation</h2>
+    <h3>Dynamic NAT (R3)</h3>
+    <pre><code>access-list 1 permit 192.168.3.0 0.0.0.255
+ip nat pool SITE3_POOL 209.165.17.1 209.165.17.100 netmask 255.255.255.0
+ip nat inside source list 1 pool SITE3_POOL overload
+
+interface g0/0
+ ip nat inside
+interface g0/1
+ ip nat outside</code></pre>
+
+    <h3>Static NAT (R1)</h3>
+    <pre><code>ip nat inside source static 192.168.1.10 200.168.10.1
+
+interface g0/0
+ ip nat inside
+interface g0/1
+ ip nat outside</code></pre>
+  </section>
+
+  <section id="gre">
+    <h2>3. GRE Tunnel Configuration</h2>
+    <p>Between Site 3 and Site 4. Tunnel network: <code>100.100.100.0/30</code></p>
+
+    <h3>R3 Side</h3>
+    <pre><code>interface Tunnel0
+ ip address 100.100.100.1 255.255.255.252
+ tunnel source [R3-public-IP]
+ tunnel destination [R4-public-IP]</code></pre>
+
+    <h3>R4 Side</h3>
+    <pre><code>interface Tunnel0
+ ip address 100.100.100.2 255.255.255.252
+ tunnel source [R4-public-IP]
+ tunnel destination [R3-public-IP]</code></pre>
+  </section>
+
+  <section id="ipv6">
+    <h2>4. IPv6 Routing</h2>
+    <h3>Default Route (R1 to R2)</h3>
+    <pre><code>ipv6 route ::/0 [next-hop or interface]</code></pre>
+
+    <h3>Redistribute Default Route with OSPFv3</h3>
+    <pre><code>ipv6 router ospf 1
  default-information originate</code></pre>
-  </div>
+  </section>
 
-  <script>
-    // Optionally, you can add interactivity here.
-    console.log("Network Exam Guide Loaded");
-  </script>
+  <footer>
+    &copy; 2025 Network Engineer Reference | All rights reserved.
+  </footer>
 </body>
 </html>
