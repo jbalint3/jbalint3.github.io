@@ -1,12 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Network Exam Study Guide</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f7f9;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+    h1, h2, h3 {
+      color: #2c3e50;
+    }
+    .section {
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    code, pre {
+      background-color: #eef1f4;
+      padding: 10px;
+      border-radius: 5px;
+      display: block;
+      overflow-x: auto;
+      margin-top: 10px;
+    }
+    ul {
+      line-height: 1.6;
+    }
+  </style>
 </head>
 <body>
-    <h1>Szerver</h1>
-    <h2>Forgalom meghatározás</h2>
+  <h1>Network Exam Study Guide</h1>
+
+  <div class="section">
+    <h2>Topics</h2>
+    <ul>
+      <li>OSPFv2 and OSPFv3 configuration</li>
+      <li>IPv4 and IPv6 addressing</li>
+      <li>Static and dynamic NAT (PAT)</li>
+      <li>GRE VPN Tunnel</li>
+      <li>Default routing</li>
+      <li>Access Control Lists (ACL)</li>
+      <li>DHCPv6 configuration</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>OSPFv2 Example</h2>
+    <pre><code>router ospf 1
+ router-id 2.2.2.2
+ network 172.16.0.0 0.0.255.255 area 0
+ passive-interface default
+ no passive-interface g0/0
+interface g0/0
+ ip ospf hello-interval 20
+ ip ospf dead-interval 80</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>Dynamic NAT (R3)</h2>
+    <pre><code>access-list 1 permit 192.168.3.0 0.0.0.255
+ip nat pool SITE3_POOL 209.165.17.1 209.165.17.100 netmask 255.255.255.0
+ip nat inside source list 1 pool SITE3_POOL overload
+interface g0/0
+ ip nat inside
+interface g0/1
+ ip nat outside</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>Static NAT (R1)</h2>
+    <pre><code>ip nat inside source static 192.168.1.10 200.168.10.1
+interface g0/0
+ ip nat inside
+interface g0/1
+ ip nat outside</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>GRE Tunnel Configuration</h2>
+    <pre><code>interface Tunnel0
+ ip address 100.100.100.1 255.255.255.252
+ tunnel source [R3-public-IP]
+ tunnel destination [R4-public-IP]</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>IPv6 OSPFv3 Configuration</h2>
+    <pre><code>ipv6 unicast-routing
+interface g0/0
+ ipv6 address 2001:db8:acad:0010::1/64
+ ipv6 address FE80::1 link-local
+ ipv6 ospf 1 area 0
+ ipv6 ospf hello-interval 20
+ ipv6 ospf dead-interval 80
+ipv6 router ospf 1
+ router-id 1.1.1.1</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>IPv6 Default Route</h2>
+    <pre><code>ipv6 route ::/0 [next-hop or interface]
+ipv6 router ospf 1
+ default-information originate</code></pre>
+  </div>
+
+  <script>
+    // Optionally, you can add interactivity here.
+    console.log("Network Exam Guide Loaded");
+  </script>
 </body>
 </html>
