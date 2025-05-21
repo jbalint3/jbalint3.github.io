@@ -3,167 +3,274 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Network Exam Preparation Guide</title>
+  <title>CCNA3 Documentation</title>
   <style>
+    :root {
+      --primary: #2c3e50;
+      --secondary: #ecf0f1;
+      --accent: #3498db;
+    }
     body {
-      font-family: "Segoe UI", sans-serif;
       margin: 0;
-      background-color: #f4f4f9;
-      color: #333;
+      font-family: Arial, sans-serif;
+      background: var(--secondary);
+      color: var(--primary);
     }
     header {
-      background-color: #283593;
-      color: white;
-      padding: 20px;
+      background: var(--primary);
+      color: var(--secondary);
+      padding: 1rem;
       text-align: center;
-    }
-    nav {
-      background: #3949ab;
-      color: white;
-      padding: 15px;
       position: sticky;
       top: 0;
+      z-index: 1000;
+    }
+    .container {
+      display: flex;
+    }
+    nav {
+      width: 250px;
+      background: var(--primary);
+      color: var(--secondary);
+      height: calc(100vh - 64px);
+      position: sticky;
+      top: 64px;
+      padding: 1rem;
+      overflow-y: auto;
     }
     nav a {
-      color: #fff;
-      margin: 0 10px;
+      color: var(--secondary);
       text-decoration: none;
-      font-weight: bold;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+    nav a:hover {
+      color: var(--accent);
+    }
+    main {
+      flex: 1;
+      padding: 2rem;
     }
     section {
-      padding: 20px;
-      max-width: 900px;
-      margin: auto;
-    }
-    h2 {
-      border-bottom: 2px solid #ccc;
-      padding-bottom: 5px;
-      margin-top: 40px;
+      margin-bottom: 2rem;
     }
     pre {
-      background-color: #1e1e1e;
-      color: #dcdcdc;
-      padding: 10px;
-      border-radius: 6px;
+      background: #bdc3c7;
+      padding: 1rem;
       overflow-x: auto;
-      font-size: 14px;
     }
-    code {
-      font-family: Consolas, monospace;
+    input#search {
+      width: 100%;
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+      border: none;
+      border-radius: 4px;
     }
-    footer {
-      text-align: center;
-      padding: 20px;
-      background-color: #e8eaf6;
-      color: #555;
-      margin-top: 40px;
+    h3 {
+      margin-top: 1rem;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Network Exam Preparation Guide</h1>
-    <p>A professional configuration reference for networking exams and practice.</p>
-  </header>
+  <header><h1>Packet Tracer Study Guide</h1></header>
+  <div class="container">
+    <nav>
+      <input type="text" id="search" placeholder="Search...">
+      <a href="#section1">1. Configuring IP Addresses</a>
+      <a href="#section2">2. OSPFv2 Routing Setup</a>
+      <a href="#section3">3. OSPFv3 Routing Setup</a>
+      <a href="#section4">4. Access Control Lists (ACLs)</a>
+      <a href="#section5">5. NAT Configurations</a>
+      <a href="#section6">6. GRE Tunnel Configuration</a>
+      <a href="#section7">7. PPP CHAP Authentication</a>
+      <a href="#section8">8. Stateful DHCPv6</a>
+      <a href="#section9">9. Default Routes</a>
+      <a href="#section10">10. Saving Configuration</a>
+    </nav>
+    <main>
+      <section id="section1">
+        <h2>1. Configuring IP Addresses</h2>
+        <p><strong>Objective:</strong> Assign both IPv4 and IPv6 addresses on router interfaces and hosts.</p>
+        <p><strong>Steps on a router interface:</strong></p>
+        <ol>
+          <li>Enter privileged EXEC mode with <code>enable</code>.</li>
+          <li>Enter global configuration: <code>configure terminal</code>.</li>
+          <li>Enter interface configuration: <code>interface GigabitEthernet0/0</code>.</li>
+          <li>Assign an IPv4 address and subnet mask: <code>ip address 172.16.0.1 255.255.0.0</code>.</li>
+          <li>Assign a global IPv6 address: <code>ipv6 address 2001:db8:acad:0040::1/64</code>.</li>
+          <li>Assign a link-local IPv6 address: <code>ipv6 address FE80::1 link-local</code>.</li>
+          <li>Enable the interface: <code>no shutdown</code>.</li>
+        </ol>
+        <pre><code>Router> enable
+Router# configure terminal
+Router(config)# interface GigabitEthernet0/0
+Router(config-if)# ip address 172.16.0.1 255.255.0.0
+Router(config-if)# ipv6 address 2001:db8:acad:0040::1/64
+Router(config-if)# ipv6 address FE80::1 link-local
+Router(config-if)# no shutdown</code></pre>
+        <p><strong>On a host (manual IPv6):</strong> Enable IPv6 and configure address and gateway.</p>
+        <pre><code>PC> ipv6 enable
+PC> ipv6 address 2001:db8:acad:0060::2/64
+PC> ipv6 default-gateway FE80::1</code></pre>
+      </section>
+      <section id="section2">
+        <h2>2. OSPFv2 Routing Setup</h2>
+        <p><strong>Objective:</strong> Configure OSPF for IPv4 to advertise connected networks in Area 0, set a router ID, make certain interfaces passive, and adjust timer intervals.</p>
+        <p><strong>Procedure:</strong></p>
+        <ol>
+          <li>Enter global configuration: <code>configure terminal</code>.</li>
+          <li>Enable OSPF and assign process ID: <code>router ospf 1</code>.</li>
+          <li>Set a unique router ID: <code>router-id 1.1.1.1</code>.</li>
+          <li>Advertise networks: <code>network 172.16.0.0 0.0.255.255 area 0</code>.</li>
+          <li>Prevent OSPF on unused interfaces: <code>passive-interface GigabitEthernet0/1</code>.</li>
+          <li>Adjust hello and dead intervals on an interface:</li>
+        </ol>
+        <pre><code>Router# configure terminal
+Router(config)# router ospf 1
+Router(config-router)# router-id 1.1.1.1
+Router(config-router)# network 172.16.0.0 0.0.255.255 area 0
+Router(config-router)# passive-interface GigabitEthernet0/1
+Router(config)# interface GigabitEthernet0/0
+Router(config-if)# ip ospf hello-interval 20
+Router(config-if)# ip ospf dead-interval 80</code></pre>
+        <p><strong>Why?</strong> OSPF dynamically shares routes; passive interfaces stop sending LSAs but still learn routes; timer adjustments help match network requirements.</p>
+      </section>
+      <section id="section3">
+        <h2>3. OSPFv3 Routing Setup</h2>
+        <p><strong>Objective:</strong> Configure OSPF for IPv6 to advertise connected IPv6 networks in Area 0 and align with OSPFv2 settings.</p>
+        <p><strong>Steps:</strong></p>
+        <ol>
+          <li>Enable IPv6 OSPF process: <code>ipv6 router ospf 1</code>.</li>
+          <li>Set router ID (same as OSPFv2): <code>router-id 1.1.1.1</code>.</li>
+          <li>Exit router config and go to interface config: <code>interface GigabitEthernet0/0</code>.</li>
+          <li>Enable OSPF on IPv6 interface: <code>ipv6 ospf 1 area 0</code>.</li>
+          <li>Adjust hello and dead intervals for IPv6 OSPF:</li>
+        </ol>
+        <pre><code>Router# configure terminal
+Router(config)# ipv6 router ospf 1
+Router(config-rtr)# router-id 1.1.1.1
+Router(config-rtr)# exit
+Router(config)# interface GigabitEthernet0/0
+Router(config-if)# ipv6 ospf 1 area 0
+Router(config-if)# ipv6 ospf hello-interval 20
+Router(config-if)# ipv6 ospf dead-interval 80</code></pre>
+        <p><strong>Why?</strong> OSPFv3 handles IPv6 routing; aligning intervals and IDs maintains consistency.</p>
+      </section>
+      <section id="section4">
+        <h2>4. Access Control Lists (ACLs)</h2>
+        <p><strong>4.1 Standard IPv4 ACL</strong>: Control traffic based only on source IP.</p>
+        <p><strong>Example:</strong> Block Telnet (port 23) from anywhere, allow a specific host, then permit all other traffic.</p>
+        <pre><code>Router(config)# access-list 10 deny tcp any any eq 23
+Router(config)# access-list 10 permit ip host 192.168.50.2 100.0.0.0 0.255.255.255
+Router(config)# access-list 10 permit ip any any
+Router(config)# interface Serial0/0/0
+Router(config-if)# ip access-group 10 in</code></pre>
+        <p><strong>Why?</strong> The ACL order matters: denies Telnet first, allows trusted host, then permits other traffic to avoid implicit deny.</p>
+        <h3>4.2 Extended IPv4 ACL</h3>
+        <p><strong>Example:</strong> Permit FTP from one host, deny FTP to another, then allow all other traffic.</p>
+        <pre><code>Router(config)# access-list 110 permit tcp host 192.168.4.4 any eq 21
+Router(config)# access-list 110 deny tcp any host 192.168.7.10 eq 21
+Router(config)# access-list 110 permit ip any any
+Router(config)# interface GigabitEthernet0/1
+Router(config-if)# ip access-group 110 in</code></pre>
+        <p><strong>Why?</strong> Extended ACLs filter by protocol and port, giving finer control.</p>
+        <h3>4.3 IPv6 ACL</h3>
+        <p><strong>Example:</strong> Block ICMPv6 to a server, allow other IPv6 traffic.</p>
+        <pre><code>Router(config)# ipv6 access-list BLOCK_ICMP
+Router(config-ipv6-acl)# deny icmp any host 2001:db8:acad:0070::10
+Router(config-ipv6-acl)# permit ipv6 any any
+Router(config)# interface GigabitEthernet0/1
+Router(config-if)# ipv6 traffic-filter BLOCK_ICMP in</code></pre>
+        <p><strong>Why?</strong> IPv6 must explicitly filter ICMPv6; otherwise, neighboring and path MTU discovery break.</p>
+      </section>
+      <section id="section5">
+        <h2>5. NAT Configurations</h2>
+        <p><strong>5.1 Static NAT</strong>: Map one internal IP to one external IP.</p>
+        <pre><code>Router(config)# ip nat inside source static 192.168.1.10 200.168.10.1
+Router(config)# interface GigabitEthernet0/0
+Router(config-if)# ip nat inside
+Router(config)# interface Serial0/0/0
+Router(config-if)# ip nat outside</code></pre>
+        <p><strong>Why?</strong> Ensures a server always uses the same public address.</p>
+        <h3>5.2 Dynamic NAT with Pool</h3>
+        <pre><code>Router(config)# ip nat pool SITE3POOL 209.165.17.1 209.165.17.100 netmask 255.255.255.0
+Router(config)# access-list 5 permit 192.168.3.0 0.0.0.255
+Router(config)# ip nat inside source list 5 pool SITE3POOL overload</code></pre>
+        <p><strong>Why?</strong> Many internal hosts share a range of public addresses dynamically.</p>
+        <h3>5.3 PAT (Port Address Translation)</h3>
+        <pre><code>Router(config)# interface Serial0/0/0
+Router(config-if)# ip nat outside
+Router(config)# interface GigabitEthernet0/0
+Router(config-if)# ip nat inside
+Router(config)# ip nat inside source list 5 interface Serial0/0/0 overload</code></pre>
+        <p><strong>Why?</strong> Many hosts share one public IP by mapping ports.</p>
+      </section>
+      <section id="section6">
+        <h2>6. GRE Tunnel Configuration</h2>
+        <p><strong>Objective:</strong> Create a simple GRE tunnel between two sites for encapsulating traffic.</p>
+        <ol>
+          <li>Create the tunnel interface: <code>interface Tunnel0</code>.</li>
+          <li>Assign IP on the tunnel network: <code>ip address 100.100.100.1 255.255.255.252</code>.</li>
+          <li>Specify physical source and destination:</li>
+        </ol>
+        <pre><code>Router3(config)# interface Tunnel0
+Router3(config-if)# ip address 100.100.100.1 255.255.255.252
+Router3(config-if)# tunnel source GigabitEthernet0/1
+Router3(config-if)# tunnel destination 198.51.100.2
+Router3(config-if)# tunnel mode gre ip
+Router3(config)# ip route 192.168.4.0 255.255.255.0 Tunnel0</code></pre>
+        <p><strong>Why?</strong> GRE tunnels encapsulate IP packets over an IP network, providing a virtual point-to-point link.</p>
+      </section>
+      <section id="section7">
+        <h2>7. PPP CHAP Authentication</h2>
+        <p><strong>Objective:</strong> Secure a PPP WAN link using CHAP between routers.</p>
+        <pre><code>RouterA(config)# interface Serial0/0/0
+RouterA(config-if)# encapsulation ppp
+RouterA(config-if)# ppp authentication chap
+RouterA(config-if)# ppp chap hostname ROUTER_A
+RouterA(config-if)# ppp chap password 0 cisco123
 
-  <nav>
-    <a href="#topics">Topics</a>
-    <a href="#ospf">OSPF</a>
-    <a href="#nat">NAT</a>
-    <a href="#gre">GRE</a>
-    <a href="#ipv6">IPv6</a>
-  </nav>
-
-  <section id="topics">
-    <h2>Key Topics</h2>
-    <ul>
-      <li>OSPFv2 and OSPFv3 Configuration</li>
-      <li>IPv4 and IPv6 Addressing</li>
-      <li>Static and Dynamic NAT (PAT)</li>
-      <li>GRE VPN Tunnel Setup</li>
-      <li>Default Routing Strategies</li>
-      <li>Access Control Lists (ACL)</li>
-      <li>Stateful DHCPv6 Services</li>
-    </ul>
-  </section>
-
-  <section id="ospf">
-    <h2>1. OSPF Configuration</h2>
-    <h3>OSPFv2</h3>
-    <pre><code>router ospf 1
- router-id 2.2.2.2
- network 172.16.0.0 0.0.255.255 area 0
- passive-interface default
- no passive-interface g0/0
-
-interface g0/0
- ip ospf hello-interval 20
- ip ospf dead-interval 80</code></pre>
-
-    <h3>OSPFv3 (IPv6)</h3>
-    <pre><code>ipv6 unicast-routing
-
-interface g0/0
- ipv6 address 2001:db8:acad:0010::1/64
- ipv6 address FE80::1 link-local
- ipv6 ospf 1 area 0
- ipv6 ospf hello-interval 20
- ipv6 ospf dead-interval 80
-
-ipv6 router ospf 1
- router-id 1.1.1.1</code></pre>
-  </section>
-
-  <section id="nat">
-    <h2>2. NAT Translation</h2>
-    <h3>Dynamic NAT (R3)</h3>
-    <pre><code>access-list 1 permit 192.168.3.0 0.0.0.255
-ip nat pool SITE3_POOL 209.165.17.1 209.165.17.100 netmask 255.255.255.0
-ip nat inside source list 1 pool SITE3_POOL overload
-
-interface g0/0
- ip nat inside
-interface g0/1
- ip nat outside</code></pre>
-
-    <h3>Static NAT (R1)</h3>
-    <pre><code>ip nat inside source static 192.168.1.10 200.168.10.1
-
-interface g0/0
- ip nat inside
-interface g0/1
- ip nat outside</code></pre>
-  </section>
-
-  <section id="gre">
-    <h2>3. GRE Tunnel Configuration</h2>
-    <p>Between Site 3 and Site 4. Tunnel network: <code>100.100.100.0/30</code></p>
-
-    <h3>R3 Side</h3>
-    <pre><code>interface Tunnel0
- ip address 100.100.100.1 255.255.255.252
- tunnel source [R3-public-IP]
- tunnel destination [R4-public-IP]</code></pre>
-
-    <h3>R4 Side</h3>
-    <pre><code>interface Tunnel0
- ip address 100.100.100.2 255.255.255.252
- tunnel source [R4-public-IP]
- tunnel destination [R3-public-IP]</code></pre>
-  </section>
-
-  <section id="ipv6">
-    <h2>4. IPv6 Routing</h2>
-    <h3>Default Route (R1 to R2)</h3>
-    <pre><code>ipv6 route ::/0 [next-hop or interface]</code></pre>
-
-    <h3>Redistribute Default Route with OSPFv3</h3>
-    <pre><code>ipv6 router ospf 1
- default-information originate</code></pre>
-  </section>
-
-  <footer>
-    &copy; 2025 Network Engineer Reference | All rights reserved.
-  </footer>
+RouterB(config)# username ROUTER_A password 0 cisco123
+RouterB(config)# interface Serial0/0/0
+RouterB(config-if)# encapsulation ppp
+RouterB(config-if)# ppp authentication chap</code></pre>
+        <p><strong>Why?</strong> CHAP provides challenge-based authentication, ensuring credentials are not sent in clear text.</p>
+      </section>
+      <section id="section8">
+        <h2>8. Stateful DHCPv6</h2>
+        <p><strong>Objective:</strong> Provide IPv6 addresses and DNS via DHCPv6.</p>
+        <pre><code>Router(config)# ipv6 dhcp pool DHCPV6_POOL
+Router(config-dhcpv6)# address prefix 2001:db8:acad:0060::/64
+Router(config-dhcpv6)# dns-server 2001:db8::53
+Router(config)# interface GigabitEthernet0/1
+Router(config-if)# ipv6 dhcp server DHCPV6_POOL</code></pre>
+        <p><strong>Why?</strong> Stateful DHCPv6 tracks assignments and provides configuration options similar to IPv4 DHCP.</p>
+      </section>
+      <section id="section9">
+        <h2>9. Default Routes</h2>
+        <p><strong>Objective:</strong> Define fallback routes for IPv4 and IPv6 outbound traffic.</p>
+        <pre><code>Router(config)# ip route 0.0.0.0 0.0.0.0 Serial0/0/0
+Router(config)# ipv6 route ::/0 2001:db8:acad:0050::1
+Router(config)# router ospf 1
+Router(config-router)# default-information originate
+Router(config)# ipv6 router ospf 1
+Router(config-rtr)# default-information originate</code></pre>
+        <p><strong>Why?</strong> Default routes catch all unknown destinations, and propagating defaults in OSPF makes them known to other routers.</p>
+      </section>
+      <section id="section10">
+        <h2>10. Saving Configuration</h2>
+        <p><strong>Command:</strong> Save running-config to startup-config so changes persist after reload.</p>
+        <pre><code>Router# copy running-config startup-config</code></pre>
+      </section>
+    </main>
+  </div>
+  <script>
+    document.getElementById('search').addEventListener('input', function() {
+      const filter = this.value.toLowerCase();
+      document.querySelectorAll('nav a').forEach(a => {
+        a.style.display = a.textContent.toLowerCase().includes(filter) ? '' : 'none';
+      });
+    });
+  </script>
 </body>
 </html>
